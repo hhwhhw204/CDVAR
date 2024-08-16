@@ -1,4 +1,4 @@
-![logo](logo.png)
+![logo](logo.jpg)
 ### CDVAR: A Multimodal Model for Precise Prediction of Druggable Mutations in Cancer
 
 CDVAR, a groundbreaking multimodal model that predicts druggable mutations with unparalleled accuracy across both pan-cancer and specific cancer types. By seamlessly integrating a diverse spectrum of features, including DNA and protein sequences, and mutation annotations, CDVAR constructs a powerful framework for mutation prediction. 
