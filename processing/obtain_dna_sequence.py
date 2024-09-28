@@ -38,7 +38,8 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     csv = "./info/csv/{}.csv".format(args.dataset)
-    hg19_file = "/hg19.fa"
+    # Download it in UCSC
+    hg19_file = "./info/hg19.fa"
     save_dna_ref_asseq = "./out/{}_dna_ref_{}bp.txt".format(args.dataset, args.seq_len*2)
     save_dna_alt_asseq = "./out/{}_dna_alt_{}bp.txt".format(args.dataset, args.seq_len*2)
     obtain_dna_cut(csv,hg19_file,save_dna_ref_asseq,save_dna_alt_asseq) 
