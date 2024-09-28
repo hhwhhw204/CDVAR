@@ -7,7 +7,6 @@ def save_to_file(data, file):
     with open(file, "w") as f:
         for line in data:
             f.write(line + "\n")
-    print(file)
 
 
 def obtain_dna_cut(csv, hg19_file, dna_ref_save, dna_alt_save):   
@@ -18,7 +17,6 @@ def obtain_dna_cut(csv, hg19_file, dna_ref_save, dna_alt_save):
     fastafile=pysam.FastaFile(hg19_file)    
     ref_seqs, alt_seqs, ref_lines, alt_lines = [], [], [], []
 
-    print("0")
     for _,row in df.iterrows():
         seq = fastafile.fetch(row['chr'], row['start']-args.seq_len, row['start']+args.seq_len).upper()
         assert seq[args.seq_len-1] == row['ref'], "error!"
@@ -28,7 +26,6 @@ def obtain_dna_cut(csv, hg19_file, dna_ref_save, dna_alt_save):
         alt_seqs.append(re.sub(r'[^TCGA]', "A", alt_seq))
         ref_lines.append(f"{row['chr']}_{row['start']}_{row['ref']}_{row['alt']}\t{ref_seq}")
         alt_lines.append(f"{row['chr']}_{row['start']}_{row['ref']}_{row['alt']}\t{alt_seq}")
-    print("1")
     save_to_file(ref_lines, dna_ref_save)
     save_to_file(alt_lines, dna_alt_save)
 
