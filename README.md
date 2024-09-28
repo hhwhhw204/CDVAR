@@ -7,31 +7,27 @@ CDVAR, a groundbreaking multimodal model that predicts druggable mutations with 
 
 ### Data processing
 
-The code for processing data features is located in the processing/ directory. Please prepare a CSV file containing the chromosome, mutation position, reference base, and alternate base, following the format of info/example.csv. Use the ANNOVAR tool to obtain protein annotations, similar to the info/example_asseq format.After that, run 
+The code for processing data features is located in the processing/ directory. Please prepare a CSV file containing the chromosome, mutation position, reference base, and alternate base, following the format of info/example.csv. Use the ANNOVAR tool to obtain protein annotations, similar to the info/example_asseq format. After that, run 
 ```
 python obtain_prt_sequence.py
 ```
 obtain the truncated protein sequence.
 
-run
 ```
 python obtain_prt_repr.py
 ```
 obtain the truncated protein representation.
-
-run 
+ 
 ```
 python obtain_dna_sequence.py
 ```
 obtain the truncated DNA sequence.
 
-run
 ```
 python obtain_dna_repr.py
 ```
 obtain the truncated DNA representation.
 
-run
 ```
 python obtain_cancer_mutation_multipool.py
 ```
@@ -56,5 +52,7 @@ python pan-cancer_predict.py
 python specific-cancer_predict.py
 ```
 
+### CDVAR score
+Here are stored the CDVAR scores for 267,679 mutations from the COSMIC Census Genes Mutation project and 3,289,953 mutations from the COSMIC Cancer Mutation Census.
 
 
