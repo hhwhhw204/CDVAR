@@ -33,7 +33,7 @@ python obtain_cancer_mutation_multipool.py
 ```
 obtain cancer context features using multiprocessing.
 
-The features required for training are the truncated protein representation, truncated DNA sequence, and cancer features
+The features required for training are the truncated protein representation, truncated DNA sequence, and cancer features.
 
 ### Train
 
