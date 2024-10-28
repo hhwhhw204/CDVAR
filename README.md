@@ -39,11 +39,12 @@ The features required for training are the truncated protein representation, tru
 
 The training code is in the OncoKB_train/ directory. The features required for training the model are prt_200bp_repr.npy, dna_500bp_repr.npy, mut fea_100bpx2.tsv, which can be obtained in Step "Data processing". 
 
-After processing the positive and negative sample data, run
+Due to file size limitations, we provide the data style required for training in processing/out/ directory. After users processing their own positive and negative samples. run
 
 ```
 python pan-caner_train.py -mul 10
 ```
+The optimal model with a 1:10 ratio of positive to negative samples in the pan-cancer setting is saved in the OncoKB_train/out/Pan-cancer_best_model_10.pth
 
 ### Benchmark Predict
 
