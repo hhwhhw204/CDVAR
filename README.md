@@ -37,7 +37,9 @@ The features required for training are the truncated protein representation, tru
 
 ### Train
 
-The training code is in the OncoKB_train/ directory. After data processing, run
+The training code is in the OncoKB_train/ directory. The features required for training the model are prt_200bp_repr.npy, dna_500bp_repr.npy, mut fea_100bpx2.tsv, which can be obtained in Step "Data processing". 
+
+After processing the positive and negative sample data, run
 
 ```
 python pan-caner_train.py -mul 10
