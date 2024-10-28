@@ -16,7 +16,7 @@ obtain the truncated protein sequence.
 ```
 python obtain_prt_repr.py
 ```
-obtain the truncated protein representation.
+protein sequence was passed through ESMFold model, and middle layer characterization was extracted as truncated protein representation.
  
 ```
 python obtain_dna_sequence.py
@@ -26,7 +26,7 @@ obtain the truncated DNA sequence.
 ```
 python obtain_dna_repr.py
 ```
-obtain the truncated DNA representation.
+DNA sequence was passed through DNABERT2 pre-training model, and middle layer characterization was extracted as the truncated DNA representation.
 
 ```
 python obtain_cancer_mutation_multipool.py
@@ -37,7 +37,7 @@ The features required for training are the truncated protein representation, tru
 
 ### Train
 
-The training code is in the OncoKB_train/ directory. DNA sequence was passed through DNABERT2 pre-training model, protein sequence was passed through ESMFold model, and middle layer characterization was extracted as model data. After data processing, run
+The training code is in the OncoKB_train/ directory. After data processing, run
 
 ```
 python pan-caner_train.py -mul 10
