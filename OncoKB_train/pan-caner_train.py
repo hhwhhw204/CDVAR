@@ -23,6 +23,31 @@ def set_seed(seed):
     torch.cuda.manual_seed_all(seed)
 
 
+def concat_prt_repr(pos_path, neg_path):
+    pos_prt_token = np.load(pos_path)
+    neg_prt_token = np.load(neg_path)
+    prt_repr = np.concatenate((pos_prt_token, neg_prt_token), axis=0)
+    prt_repr = torch.tensor(prt_repr)
+    labels = torch.tensor(np.array([1]*len(pos_prt_token) + [0]*len(neg_prt_token)))
+    return prt_repr, labels
+
+
+def concat_dna_repr(pos_path, neg_path):
+    pos_dna_repr = np.load(pos_path)
+    neg_dna_repr = np.load(neg_path)
+    dna_repr = np.concatenate((pos_dna_repr,neg_dna_repr), axis=0)
+    dna_repr = torch.tensor(dna_repr)
+    return dna_repr
+
+
+def concat_pancan_fea(pos_path, neg_path):
+    pos_df = pd.read_csv(pos_path,sep='\t')
+    neg_df = pd.read_csv(neg_path,sep='\t')
+    pan_df = pd.concat((pos_df,neg_df),axis=0)
+    pan_df = pan_df.drop(['chr','pos','YES','.'],axis=1)
+    panfea = torch.tensor(pan_df.values, dtype=torch.float32)
+    return panfea
+
         
 
 def k_verify(X, P, F, Y, args):
@@ -112,16 +137,20 @@ if __name__ == '__main__':
     args = parser.parse_args()
     set_seed(42) 
 
-    ########## trainset ##########
-    dna_fea = torch.load(f'../../data/OncoKB_trainset/Pan-cancer/1_{args.mul}/dna_fea.pt')
-    prt_rep = torch.load(f'../../data/OncoKB_trainset/Pan-cancer/1_{args.mul}/prt_rep.pt')
-    panfea = torch.load(f'../../data/OncoKB_trainset/Pan-cancer/1_{args.mul}/panfea_data.pt')
-    labels = torch.load(f'../../data/OncoKB_trainset/Pan-cancer/1_{args.mul}/labels.pt')
+    print("Loading prt repr by esmfold...")
+    pos_prt_path = "../processing/out/OncoKB/OncoKB_prt_200bp_repr.npy" 
+    neg_prt_path = "../processing/out/COSMIC/COSMIC_prt_200bp_repr.npy" 
+    prt_rep, labels = concat_prt_repr(pos_prt_path, neg_prt_path)
     
-    dna_fea_tensor = torch.from_numpy(dna_fea)
-    prt_rep_tensor = torch.from_numpy(prt_rep)
-    panfea_tensor = torch.from_numpy(panfea)
-    labels_tensor = torch.from_numpy(labels)
+    print("Loading dna repr by DNABERT2...")
+    pos_dna_path = "../processing/out/OncoKB/OncoKB_dna_500bp_repr.npy" 
+    neg_dna_path = "../processing/out/COSMIC/COSMIC_dna_500bp_repr.npy" 
+    dna_fea = concat_dna_repr(pos_dna_path, neg_dna_path)
+
+    print("Loading processed pancan fea...")
+    pos_panfea_path = "../processing/out/OncoKB/OncoKB_mut_fea_100bpx2.tsv"
+    neg_panfea_path = "../processing/out/COSMIC/COSMIC_mut_fea_100bpx2.tsv" 
+    panfea,_ = concat_pancan_fea(pos_panfea_path, neg_panfea_path)
 
     ################ k-folf cross verify ###############
     auroc, auprc, pvalue, acc = k_verify(dna_fea, prt_rep, panfea, labels, args)
