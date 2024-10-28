@@ -44,7 +44,6 @@ Due to file size limitations, we provide the data style required for training in
 ```
 python pan-caner_train.py -mul 10
 ```
-The optimal model with a 1:10 ratio of positive to negative samples in the pan-cancer setting is saved in the OncoKB_train/out/Pan-cancer_best_model_10.pth
 
 ### Benchmark Predict
 
@@ -56,6 +55,6 @@ python specific-cancer_predict.py
 ```
 
 ### CDVAR score
-Here are stored the CDVAR scores for 267,679 mutations from the COSMIC Census Genes Mutation project and 3,289,953 mutations from the COSMIC Cancer Mutation Census.
+CDVAR_score/ directory are stored the CDVAR scores for 267,679 mutations from the COSMIC Census Genes Mutation project and 3,289,953 mutations from the COSMIC Cancer Mutation Census.
 
 
