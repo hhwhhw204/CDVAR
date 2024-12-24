@@ -5,6 +5,8 @@ import numpy as np
 from tqdm import tqdm
 from transformers import AutoTokenizer, AutoModel, logging
 logging.set_verbosity_error()
+import os
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 
 def process_features(model, tokenizer, sequence):
@@ -13,10 +15,9 @@ def process_features(model, tokenizer, sequence):
 
 
 def obtain_dna_repr(ref_asseq_file, alt_asseq_file, save_dna_repr, args):
-    # Load model. 
-    # The model reference: https://huggingface.co/zhihan1996/DNABERT-2-117M
-    tokenizer = AutoTokenizer.from_pretrained("DNABERT_2_117M", trust_remote_code=True)
-    model = AutoModel.from_pretrained("DNABERT_2_117M", trust_remote_code=True).cuda()
+    # Load model
+    tokenizer = AutoTokenizer.from_pretrained("./DNABERT_2_117M", trust_remote_code=True)
+    model = AutoModel.from_pretrained("./DNABERT_2_117M", trust_remote_code=True).cuda()
     model.eval()
     
     # Load data
@@ -40,11 +41,11 @@ def obtain_dna_repr(ref_asseq_file, alt_asseq_file, save_dna_repr, args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='config')
-    parser.add_argument("--dataset", default='example')
+    parser.add_argument("--dataset", default='example', choices=['example','OncoKB','CIViC','CGI','JAX'])
     parser.add_argument("--seq_len", default=250)
     args = parser.parse_args()
 
-    dna_ref_asseq = "./out/example_dna_ref_{}bp.txt".format(args.seq_len*2)
-    dna_alt_asseq = "./out/example_dna_alt_{}bp.txt".format(args.seq_len*2)
-    save_dna_repr = "./out/eample_dna_{}bp_repr.npy".format(args.seq_len*2)
+    dna_ref_asseq = f"../../data/asseq/dna_asseq/{args.dataset}/{args.dataset}_dna_ref_500bp.txt"
+    dna_alt_asseq = f"../../data/asseq/dna_asseq/{args.dataset}/{args.dataset}_dna_alt_500bp.txt"
+    save_dna_repr = f"../../data/feature/dna_repr/{args.dataset}/{args.dataset}_dna_500bp_repr.npy"
     obtain_dna_repr(dna_ref_asseq, dna_alt_asseq, save_dna_repr, args)

@@ -2,6 +2,7 @@ import pandas as pd
 import pysam
 import argparse
 import re
+from tqdm import tqdm
 
 def save_to_file(data, file):
     with open(file, "w") as f:
@@ -17,7 +18,7 @@ def obtain_dna_cut(csv, hg19_file, dna_ref_save, dna_alt_save):
     fastafile=pysam.FastaFile(hg19_file)    
     ref_seqs, alt_seqs, ref_lines, alt_lines = [], [], [], []
 
-    for _,row in df.iterrows():
+    for _, row in tqdm(df.iterrows()):
         seq = fastafile.fetch(row['chr'], row['start']-args.seq_len, row['start']+args.seq_len).upper()
         assert seq[args.seq_len-1] == row['ref'], "error!"
         ref_seq = seq[:args.seq_len-1] + row['ref'] + seq[args.seq_len:]
@@ -33,13 +34,12 @@ def obtain_dna_cut(csv, hg19_file, dna_ref_save, dna_alt_save):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='config')
-    parser.add_argument("--dataset", default='example')
+    parser.add_argument("--dataset", default='CGI', choices=['example','OncoKB','CIViC','CGI','JAX'])
     parser.add_argument("--seq_len", default=250)
     args = parser.parse_args()
 
-    csv = "./info/csv/{}.csv".format(args.dataset)
-    # Download it in UCSC
-    hg19_file = "./info/hg19.fa"
-    save_dna_ref_asseq = "./out/{}_dna_ref_{}bp.txt".format(args.dataset, args.seq_len*2)
-    save_dna_alt_asseq = "./out/{}_dna_alt_{}bp.txt".format(args.dataset, args.seq_len*2)
+    csv = f"../../data/input/{args.dataset}/{args.dataset}.csv"
+    hg19_file = "../../data/utils/hg19.fa"
+    save_dna_ref_asseq = f"../../data/asseq/dna_asseq/{args.dataset}/{args.dataset}_dna_ref_500bp.txt"
+    save_dna_alt_asseq = f"../../data/asseq/dna_asseq/{args.dataset}/{args.dataset}_dna_alt_500bp.txt"
     obtain_dna_cut(csv,hg19_file,save_dna_ref_asseq,save_dna_alt_asseq) 

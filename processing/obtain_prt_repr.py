@@ -1,4 +1,3 @@
-
 import pandas as pd
 import argparse
 import numpy as np
@@ -47,11 +46,11 @@ def obtain_prt_repr(ref_prt_asseq_file, alt_prt_asseq_file, save_prt_repr):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='config')
-    parser.add_argument("--dataset", default='example')
+    parser.add_argument("--dataset", default='example', choices=['example','OncoKB','CIViC','CGI','JAX'])
     parser.add_argument("--cut_len", default=100)
     args = parser.parse_args()
 
-    ref_prt_asseq = f"./out/example_prt_ref{args.cut_len*2}.txt"
-    alt_prt_asseq = f"./out/example_prt_alt{args.cut_len*2}.txt"
-    save_prt_repr = './out/example_prt_{}bp_repr.npy'.format(args.cut_len*2)
+    ref_prt_asseq =  f"../../data/asseq/prt_asseq/{args.dataset}/{args.dataset}_asseq_prt_ref_200aa.txt"
+    alt_prt_asseq =  f"../../data/asseq/prt_asseq/{args.dataset}/{args.dataset}_asseq_prt_alt_200aa.txt"
+    save_prt_repr = f"../../data/feature/prt_repr/{args.dataset}/{args.dataset}_prt_200aa_repr.npy"
     obtain_prt_repr(ref_prt_asseq, alt_prt_asseq, save_prt_repr)

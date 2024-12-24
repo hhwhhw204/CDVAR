@@ -1,3 +1,4 @@
+import argparse
 import pandas as pd
 import pybedtools
 from tqdm import tqdm
@@ -27,10 +28,10 @@ def get_pancan_fea_by_row(row,flank,pancan,columns):
 
 
 
-def get_pancan_anno_multi_thre(file_name):
+def get_pancan_anno_multi_thre(args):
     columns = ["Chromosome", "Start_Position", "End_Position", "Variant_Classification", "Variant_Type",
-            "Consequence", "BIOTYPE", "IMPACT", "VARIANT_CLASS"]
-    pancan = pybedtools.BedTool('/PanCanAtlas.bed')
+            "Consequence", "BIOTYPE", "CANONICAL","IMPACT", "VARIANT_CLASS"]
+    pancan = pybedtools.BedTool('../../data/utils/PanCanAtlas.bed')
     pancan_df = pd.read_table(pancan.fn, names=columns)
 
     # Get column names for all features  
@@ -38,12 +39,12 @@ def get_pancan_anno_multi_thre(file_name):
     total_list = [x for col in columns[3:] for x in pancan_df[col].unique()]
 
     # Read my mutation data
-    data_df = pd.read_csv( "info/csv/" + file_name + ".csv", sep=",", header=None)
+    data_df = pd.read_csv(f"../../data/input/{args.dataset}/{args.dataset}.csv", sep=",", header=None)
     data_df.columns = ["chr", "pos", "ref", "alt"]
 
     # bed intersect
     flank = 100
-    block = 500
+    block = 100000
     k = int(data_df.shape[0]/block)
     for z in tqdm(range(0,k+1)):
         start = z * block
@@ -71,11 +72,14 @@ def get_pancan_anno_multi_thre(file_name):
             fea_df = fea_df._append(new_row,ignore_index=True)
             fea_df.fillna(0,inplace=True)
 
-        fea_df.to_csv(f"./out/{file_name}_{flank}bpx2_fea_{z}x{block}.tsv", sep="\t", header=True, index=False)
+        fea_df.to_csv(f"../../data/feature/statistics/{args.dataset}/{args.dataset}_{flank}bpx2_statistics_tmp.tsv", sep="\t", header=True, index=False)
         print("intersect complete")
 
 
 
 if __name__=='__main__':
-    file_name = "example"
-    get_pancan_anno_multi_thre(file_name)
+    parser = argparse.ArgumentParser(description='config')
+    parser.add_argument("--dataset", default='example', choices=['example','OncoKB','CIViC','CGI','JAX'])
+    args = parser.parse_args()
+
+    get_pancan_anno_multi_thre(args)

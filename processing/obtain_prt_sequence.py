@@ -3,7 +3,6 @@ import pandas as pd
 import argparse
 
 def convert_asseq_line(in_file):
-    print("covert asseq to one line")
     tmp_file = open(in_file+"_line", 'a')
     seq_line = ""
     flg = 1   
@@ -31,6 +30,7 @@ def obtain_cut_prt(prt_asseq, save_ref_asseq,save_alt_asseq):
     prt_ref_list, prt_alt_list = [], []
 
     i=0
+    print(len(prt_aaseq))
     while(i < len(prt_aaseq)): 
         ref_line_code = prt_aaseq.iloc[i, 0].split(" ")[0]
         alt_line_code = prt_aaseq.iloc[i+2, 0].split(" ")[0]
@@ -46,8 +46,38 @@ def obtain_cut_prt(prt_asseq, save_ref_asseq,save_alt_asseq):
                 end = min(len(prt_ref),pos_altering + args.cut_len)
                 prt_ref_cut = prt_ref[start:end]
                 prt_alt_cut = prt_alt[start:end]     
-                prt_ref_list.append(prt_ref_cut)
-                prt_alt_list.append(prt_alt_cut)
+                
+            elif prt_altering[4] == 'immediate-stoploss':
+                pos_altering = int(prt_altering[7].split("-")[0]) - 1
+                start = max(0,pos_altering - args.cut_len)
+                end1 = min(len(prt_ref),pos_altering + args.cut_len)
+                end2 = min(len(prt_alt),pos_altering + args.cut_len)
+                prt_ref_cut = prt_ref[start:end1]
+                prt_alt_cut = prt_alt[start:end2] 
+            
+            elif prt_altering[4] == 'immediate-stopgain':
+                pos_stop_start = int(prt_altering[7].split("-")[0]) - 1
+                start = max(0, pos_stop_start - args.cut_len)
+                end = min(len(prt_ref), pos_stop_start + args.cut_len)
+                prt_ref_cut = prt_ref[start:end]
+                prt_alt_cut = prt_alt[start:pos_stop_start]
+
+            elif prt_altering[4] == 'startloss':
+                index = prt_ref.find(prt_alt)
+                start = max(0,index - args.cut_len)
+                end = min(len(prt_ref),index + args.cut_len)
+                prt_ref_cut = prt_ref[start:end]
+                prt_alt_cut = prt_alt[0:args.cut_len]  
+            
+            elif prt_altering[4] == 'silent':
+                pos_altering = int(prt_altering[3].split(".")[1][1:-1]) - 1
+                start = max(0,pos_altering - args.cut_len)
+                end = min(len(prt_ref),pos_altering + args.cut_len)
+                prt_ref_cut = prt_ref[start:end]
+                prt_alt_cut = prt_alt[start:end]
+            
+            prt_ref_list.append(prt_ref_cut)
+            prt_alt_list.append(prt_alt_cut)
             i = i + 4
         else:
             i = i + 2
@@ -66,11 +96,11 @@ def obtain_cut_prt(prt_asseq, save_ref_asseq,save_alt_asseq):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='config')
-    parser.add_argument("--dataset", default='example')
+    parser.add_argument("--dataset", default='example', choices=['example','OncoKB','CIViC','CGI','JAX'])
     parser.add_argument("--cut_len", default=100)
     args = parser.parse_args()
 
-    prt_asseq_path = "./info/prt_asseq/{}_asseq".format(args.dataset)
-    save_ref_asseq_path = "./out/{}_prt_ref{}.txt".format(args.dataset,str(args.cut_len*2)) 
-    save_alt_asseq_path = "./out/{}_prt_alt{}.txt".format(args.dataset,str(args.cut_len*2)) 
-    obtain_cut_prt(prt_asseq_path,save_ref_asseq_path,save_alt_asseq_path)
+    prt_asseq_path = f"../../data/asseq/prt_asseq/{args.dataset}/{args.dataset}_asseq"
+    save_ref_asseq_path = f"../../data/asseq/prt_asseq/{args.dataset}/{args.dataset}_asseq_prt_ref_200aa.txt"
+    save_alt_asseq_path = f"../../data/asseq/prt_asseq/{args.dataset}/{args.dataset}_asseq_prt_alt_200aa.txt"
+    obtain_cut_prt(prt_asseq_path, save_ref_asseq_path, save_alt_asseq_path)
