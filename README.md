@@ -115,7 +115,7 @@ We sampled negative examples from COSMIC and, due to the database's large size, 
 ```
 cd code/OncoKB_train
 python pan-caner_train.py --mul 10 --e 8 --bs 12 --lr 0.00005
-python specific-caner_train.py -cancer AML --e 8 --bs 12 --lr 0.00005
+python specific-caner_train.py --cancer AML --e 8 --bs 12 --lr 0.00005
 ```
 
 The optimal training model is saved in `CDVAR/code/OncoKB_train/save_model/`.
