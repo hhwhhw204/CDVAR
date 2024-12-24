@@ -1,19 +1,49 @@
 ![logo](logo.png)
-### CDVAR: A Multimodal Model for Precise Prediction of Druggable Mutations in Cancer
+# CDVAR: Prioritization of Cancer Druggable Mutations Using Protein Structural Modeling
 
-### 1.Introduction
+## :bulb:Introduction
 
 CDVAR, a mutation-level target prediction model that prioritizes dynamic modeling of protein structural changes and integrates DNA, protein structural, and mutation modalities into a unified framework. 
 
 ![CDVAR](CDVAR.png)
 
-### 2. Model and Data
+## :bookmark_tabs: Model and Data
 
 The optimal model from cross-validation, along with the training and evaluation data, is saved in [Google drive](https://drive.google.com/drive/folders/1pK3Eey6F1t6uTw9JdQeHsNqMtF1486aq?usp=sharing). Downloading these files is essential for reproducing our results.
 
 If the DNABERT2 model fails to load, please download it from [hugging_face](https://huggingface.co/zhihan1996/DNABERT-2-117M/tree/main). 
 
-### 3. Setup environment
+The folder structure is as follows:
+
+```
+CDVAR/
+├── CDVAR_score/
+├── code/
+│   ├── benchmark_predict/
+│   ├── OncoKB_train/
+│   │   └── save_model/
+│   ├── processing/
+│   │   ├── DNABERT_2_117M/
+│   │   └── hub/
+└── data/
+    ├── asseq/
+    │   ├── dna_asseq/
+    │   └── prt_asseq/
+    ├── eval/
+    │   ├── CGI/
+    │   ├── CIViC/
+    │   └── JAX/
+    ├── feature/
+    │   ├── dna_repr/
+    │   ├── prt_repr/
+    │   └── statistics/
+    ├── input/
+    └── utils/
+```
+
+
+
+## :wrench: Setup environment
 
 Clone this repository and cd into it as below.
 
@@ -31,27 +61,28 @@ conda activate cdvar
 pip install -r requirements.txt
 ```
 
-### 4.Usage
+## 🧬 Usage
 
 We have preprocessed the features required for training and stored them in `CDVAR/data/feature`. 
 
 If you want to obtain multimodal features for your own mutation data, please follow the Data Processing steps. Otherwise, you can skip to the training step.
 
-### Data processing
+### 1. Data processing
 
 Please prepare a CSV file with chromosome, position, reference base, and alternate base, following the format in  `CDVAR/data/input/example.csv `.
 
-#### Obtain the initial sequence.
+#### Obtain the initial sequence
 
-We use the hg19 genome (https://hgdownload.cse.ucsc.edu/goldenpath/hg19/bigZips/hg19.fa.gz) to obtain the DNA sequence based on the mutation site. Please ensure that the file `CDVAR/data/utils/hg19.fa` exists.
+We use the [hg19 genome](https://hgdownload.cse.ucsc.edu/goldenpath/hg19/bigZips/hg19.fa.gz) to obtain the DNA sequence, similar to the `CDVAR/data/asseq/dna_asseq/example/example_dna_ref_500bp.txt` format. 
 
 ```
 # obtain the truncated DNA sequence.
+# Please ensure that the file `CDVAR/data/utils/hg19.fa` exists.
 cd code/processing/
 python obtain_dna_sequence.py --dataset example
 ```
 
-Use the ANNOVAR(http://www.openbioinformatics.org/annovar/download/0wgxR2rIVP/annovar.latest.tar.gz)  to obtain protein annotations, similar to the `CDVAR/data/example/example_asseq` format. 
+Use the [ANNOVAR](http://www.openbioinformatics.org/annovar/download/0wgxR2rIVP/annovar.latest.tar.gz)  to obtain protein annotations, similar to the `CDVAR/data/asseq/prt_asseq/example/example_asseq` format. 
 
 ```
 # An example of ANNOVAR usage is as follows
@@ -77,7 +108,7 @@ python obtain_prt_repr.py --dataset example
 python obtain_cancer_mutation_multipool.py --dataset example
 ```
 
-### Train
+### 2. Train
 
 We sampled negative examples from COSMIC and, due to the database's large size, only provide their multimodal features for training.
 
@@ -89,7 +120,7 @@ python specific-caner_train.py -cancer AML --e 8 --bs 12 --lr 0.00005
 
 The optimal training model is saved in `CDVAR/code/OncoKB_train/save_model/`.
 
-### Benchmark Predict
+### 3. Benchmark Predict
 
 The evaluation data is in `CDVAR/data/eval`. Due to storage limitations, we have only performed prediction on the CIViC and CGI datasets to facilitate result reproduction in the paper.
 
@@ -98,7 +129,7 @@ cd code/benchmark_predict
 python pan-cancer_predict.py
 ```
 
-### CDVAR score
+### 4. CDVAR score
 CDVAR_score/ directory are stored the CDVAR scores for 267,679 mutations from the COSMIC Census Genes Mutation project and 3,289,953 mutations from the COSMIC Cancer Mutation Census. 
 
 The prediction results can also be viewed on the website http://cdvar.haiyanglab.cn/.
