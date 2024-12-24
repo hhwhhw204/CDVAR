@@ -16,7 +16,9 @@ If the DNABERT2 model fails to load, please download it from https://huggingface
 ### 3. Setup environment
 
 ```
+git clone https://github.com/hhwhhw204/CDVAR.git
 # create and activate virtual python environment
+cd CDVAR
 conda env create -f environment.yml
 ```
 
@@ -26,7 +28,7 @@ conda env create -f environment.yml
 
 Please prepare a CSV file with chromosome, position, reference base, and alternate base, following the format in  `CDVAR/data/input/example.csv `.
 
-#### *Obtain the initial sequence.*
+#### Obtain the initial sequence.
 
 We use the hg19 genome (https://hgdownload.cse.ucsc.edu/goldenpath/hg19/bigZips/hg19.fa.gz) to obtain the DNA sequence based on the mutation site. Please ensure that the file `CDVAR/data/utils/hg19.fa` exists.
 
