@@ -9,9 +9,9 @@ CDVAR, a mutation-level target prediction model that prioritizes dynamic modelin
 
 ## :bookmark_tabs: Model and Data
 
-The optimal model from cross-validation, along with the training and evaluation data, is saved in [Google drive](https://drive.google.com/drive/folders/1pK3Eey6F1t6uTw9JdQeHsNqMtF1486aq?usp=sharing). Downloading these files is essential for reproducing our results.
+The optimal model from cross-validation, along with the training and evaluation data, is saved in [Google Drive](https://drive.google.com/drive/folders/1pK3Eey6F1t6uTw9JdQeHsNqMtF1486aq?usp=sharing). Downloading these files is essential for reproducing our results.
 
-If the DNABERT2 model fails to load, please download it from [hugging_face](https://huggingface.co/zhihan1996/DNABERT-2-117M/tree/main). 
+If the DNABERT2 model fails to load, please download it from [Huggingface](https://huggingface.co/zhihan1996/DNABERT-2-117M/tree/main) or [Google Drive](https://drive.google.com/drive/folders/1pK3Eey6F1t6uTw9JdQeHsNqMtF1486aq?usp=sharing). 
 
 The folder structure is as follows:
 
