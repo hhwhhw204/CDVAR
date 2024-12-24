@@ -9,20 +9,33 @@ CDVAR, a mutation-level target prediction model that prioritizes dynamic modelin
 
 ### 2. Model and Data
 
-The optimal model from cross-validation, along with the training and evaluation data, is saved in xxx. Downloading these files is essential for reproducing our results.
+The optimal model from cross-validation, along with the training and evaluation data, is saved in [Google drive](https://drive.google.com/drive/folders/1pK3Eey6F1t6uTw9JdQeHsNqMtF1486aq?usp=sharing). Downloading these files is essential for reproducing our results.
 
-If the DNABERT2 model fails to load, please download it from https://huggingface.co/zhihan1996/DNABERT-2-117M/tree/main. If the ESMfold model fails to load, please download it from https://github.com/facebookresearch/esm/tree/main.
+If the DNABERT2 model fails to load, please download it from [hugging_face](https://huggingface.co/zhihan1996/DNABERT-2-117M/tree/main). 
 
 ### 3. Setup environment
 
+Clone this repository and cd into it as below.
+
 ```
 git clone https://github.com/hhwhhw204/CDVAR.git
-# create and activate virtual python environment
 cd CDVAR
-conda env create -f environment.yml
+```
+
+Prepare the environment,the `requirements.txt` is based on python3.8.0.
+
+```
+# create and activate virtual python environment
+conda create --name cdvar python=3.8.0
+conda activate cdvar
+pip install -r requirements.txt
 ```
 
 ### 4.Usage
+
+We have preprocessed the features required for training and stored them in `CDVAR/data/feature`. 
+
+If you want to obtain multimodal features for your own mutation data, please follow the Data Processing steps. Otherwise, you can skip to the training step.
 
 ### Data processing
 
@@ -34,7 +47,8 @@ We use the hg19 genome (https://hgdownload.cse.ucsc.edu/goldenpath/hg19/bigZips/
 
 ```
 # obtain the truncated DNA sequence.
-python obtain_dna_sequence.py -dataset example
+cd code/processing/
+python obtain_dna_sequence.py --dataset example
 ```
 
 Use the ANNOVAR(http://www.openbioinformatics.org/annovar/download/0wgxR2rIVP/annovar.latest.tar.gz)  to obtain protein annotations, similar to the `CDVAR/data/example/example_asseq` format. 
@@ -49,21 +63,19 @@ After that, run
 
 ```
 # obtain the truncated Protein sequence.
-python obtain_prt_sequence.py  -dataset example
+python obtain_prt_sequence.py  --dataset example
 ```
 
 #### Obtain the representation
 
 ```
 # The DNA sequence is processed with DNABERT2 to extract final-layer representations.
-python obtain_dna_repr.py -dataset example
+python obtain_dna_repr.py --dataset example
 # The DNA sequence is processed with ESM2 to extract final-layer representations.
-python obtain_prt_repr.py -dataset example
+python obtain_prt_repr.py --dataset example
 # Obtain mutation statistic features.
-python obtain_cancer_mutation_multipool.py -dataset example
+python obtain_cancer_mutation_multipool.py --dataset example
 ```
-
-
 
 ### Train
 
@@ -71,24 +83,20 @@ We sampled negative examples from COSMIC and, due to the database's large size, 
 
 ```
 cd code/OncoKB_train
-python pan-caner_train.py -mul 10 -e 8 -bs 12 -lr 0.00005
-python specific-caner_train.py -cancer AML -e 8 -bs 12 -lr 0.00005
+python pan-caner_train.py --mul 10 --e 8 --bs 12 --lr 0.00005
+python specific-caner_train.py -cancer AML --e 8 --bs 12 --lr 0.00005
 ```
 
 The optimal training model is saved in `CDVAR/code/OncoKB_train/save_model/`.
 
-
-
 ### Benchmark Predict
 
-We have preprocessed the prediction data from the CIViC, CGI, and JAX-CKB datasets to facilitate result reproduction in paper. The evaluation data is in `CDVAR/data/eval`.
+The evaluation data is in `CDVAR/data/eval`. Due to storage limitations, we have only performed prediction on the CIViC and CGI datasets to facilitate result reproduction in the paper.
 
 ```
 cd code/benchmark_predict
 python pan-cancer_predict.py
 ```
-
-
 
 ### CDVAR score
 CDVAR_score/ directory are stored the CDVAR scores for 267,679 mutations from the COSMIC Census Genes Mutation project and 3,289,953 mutations from the COSMIC Cancer Mutation Census. 

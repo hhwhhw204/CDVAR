@@ -6,7 +6,7 @@ import torch
 from torch.utils.data import TensorDataset, DataLoader
 from scipy import stats
 from sklearn.metrics import roc_curve, auc, average_precision_score
-sys.path.append("/home/hyz/workspace/hhw/DrugMutation/Reproduce/code/OncoKB_train/")
+sys.path.append("../OncoKB_train/")
 from model import CDVAR
 
 
@@ -23,7 +23,7 @@ if __name__ == '__main__':
     set_seed(42)
     
     cancer = 'NSCLC'
-    for dataset in ["CIViC","CGI","JAX"]:
+    for dataset in ["CIViC","CGI"]:
         data_path = f'../../data/eval/{dataset}_{cancer}'
         dna_fea = torch.load(f'{data_path}/{cancer}_dna_fea.pt')
         prt_rep = torch.load(f'{data_path}/{cancer}_prt_rep.pt')
