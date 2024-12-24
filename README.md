@@ -73,7 +73,7 @@ Please prepare a CSV file with chromosome, position, reference base, and alterna
 
 #### Obtain the initial sequence
 
-We use the [hg19 genome](https://hgdownload.cse.ucsc.edu/goldenpath/hg19/bigZips/hg19.fa.gz) to obtain the DNA sequence, similar to the `CDVAR/data/asseq/dna_asseq/example/example_dna_ref_500bp.txt` format. 
+We use the [hg19 genome](https://hgdownload.cse.ucsc.edu/goldenpath/hg19/bigZips/hg19.fa.gz) to obtain the DNA sequence, similar to the `CDVAR/data/asseq/dna_asseq/` format. 
 
 ```
 # obtain the truncated DNA sequence.
@@ -82,7 +82,7 @@ cd code/processing/
 python obtain_dna_sequence.py --dataset example
 ```
 
-Use the [ANNOVAR](http://www.openbioinformatics.org/annovar/download/0wgxR2rIVP/annovar.latest.tar.gz)  to obtain protein annotations, similar to the `CDVAR/data/asseq/prt_asseq/example/example_asseq` format. 
+Use the [ANNOVAR](http://www.openbioinformatics.org/annovar/download/0wgxR2rIVP/annovar.latest.tar.gz)  to obtain protein annotations, similar to the `CDVAR/data/asseq/prt_asseq/` format. 
 
 ```
 # An example of ANNOVAR usage is as follows
