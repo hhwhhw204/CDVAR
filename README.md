@@ -86,7 +86,7 @@ Use the [ANNOVAR](http://www.openbioinformatics.org/annovar/download/0wgxR2rIVP/
 
 ```
 # An example of ANNOVAR usage is as follows
-annotate_variation.pl input.avinput humandb/ -buildver hg19 -out output -exonsort
+annotate_variation.pl input.tsv humandb/ -buildver hg19 -out output -exonsort
 coding_change.pl output.exonic_variant_function humandb/hg19_refGene.txt humandb/hg19_refGeneMrna.fa -includesnp -out output_asseq
 ```
 
