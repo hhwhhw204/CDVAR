@@ -131,6 +131,6 @@ python pan-cancer_predict.py
 
 ### 4. CDVAR score
 CDVAR_score/ directory are stored the CDVAR scores for 267,679 mutations from the COSMIC Census Genes Mutation project and 3,289,953 mutations from the COSMIC Cancer Mutation Census. 
-
+The training hardware is NVIDIA RTX 3090, with 24GB of memory. After extracting the characteristics mutations in advance, it was calculated that each mutation would take 0.077 seconds to process.
 The prediction results can also be viewed on the website http://cdvar.haiyanglab.cn/.
 
